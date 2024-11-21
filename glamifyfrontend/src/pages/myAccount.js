@@ -8,8 +8,17 @@ const MyAccountPage = () => {
 
   // Logout handler
   const handleLogout = () => {
-    console.log("User logged out");
     navigate("/login");
+  };
+
+  // Update account handler
+  const handleUpdateAccount = () => {
+    navigate("/update-account");
+  };
+
+  // Delete account handler
+  const handleDeleteAccount = async () => {
+      navigate("/login");
   };
 
   return (
@@ -82,6 +91,50 @@ const MyAccountPage = () => {
               <Typography>
                 <strong>Phone:</strong> {}
               </Typography>
+
+              {/* Update and Delete Buttons */}
+                <Box sx={{ display: "flex", gap: "20px" }}>
+
+
+                    
+                    <Button
+                    onClick={handleUpdateAccount}
+                    sx={{
+                        backgroundColor: "#000",
+                        color: "#fff",
+                        fontWeight: "bold",
+                        padding: "10px 20px",
+                        borderRadius: "8px",
+                        "&:hover": {
+                        backgroundColor: "#333",
+                        },
+                    }}
+                    >
+                    Update Account
+                    </Button>
+
+
+
+
+                    <Button
+                    onClick={handleDeleteAccount}
+                    sx={{
+                        backgroundColor: "#d32f2f",
+                        color: "#fff",
+                        fontWeight: "bold",
+                        padding: "10px 20px",
+                        borderRadius: "8px",
+                        "&:hover": {
+                        backgroundColor: "#b71c1c",
+                        },
+                    }}
+                    >
+                    Delete Account
+                    </Button>
+
+
+
+                </Box>
             </Box>
         </Box>
       </Box>
