@@ -9,6 +9,7 @@ import WomenPage from './pages/WomenPage';
 import KidsPage from './pages/KidsPage';
 import LoginPage from './pages/loginPage';
 import RegisterPage from './pages/registerPage';
+import MyAccountPage from './pages/myAccount';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -20,6 +21,7 @@ root.render(
       <Route path="/kids" element={<KidsPage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path='/register' element={<RegisterPage />} />
+      <Route path='/account' element={<MyAccountPage />} />
     </Routes>
   </BrouwserRouter>
 );
