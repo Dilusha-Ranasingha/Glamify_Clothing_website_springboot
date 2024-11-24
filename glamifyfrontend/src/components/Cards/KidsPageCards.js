@@ -4,16 +4,15 @@ import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
-import { useUserContext } from "../../context/UserContext";
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { useUserContext } from "../../context/UserContext";
 
 const KidsPageCards = () => {
-  // Sample collection data
   const mensCollection = [
-    {
-      id: 1,
+    {id: 1,
       name: "MID CALF SOCK - 3 Pack",
-      price: "Rs 1,780.00",
+      price: "1780",
       image: "/assets/socks.jpg", // Replace with actual image path
       sizes: ["FREE SIZE"],
       colors: ["#000000", "#ffffff"],
@@ -21,7 +20,7 @@ const KidsPageCards = () => {
     {
       id: 2,
       name: "Andor Cargo Pant",
-      price: "Rs 4,600.00",
+      price: "4600",
       image: "/assets/cargo1.jpg", // Replace with actual image path
       sizes: ["M", "L", "XL", "2XL"],
       colors: ["#000080", "#d2b48c"],
@@ -29,7 +28,7 @@ const KidsPageCards = () => {
     {
       id: 3,
       name: "LXC Tee",
-      price: "Rs 3,000.00",
+      price: "3000",
       image: "/assets/tee.jpg", // Replace with actual image path
       sizes: ["S", "M", "L", "XL", "2XL"],
       colors: ["#000000", "#ffffff"],
@@ -37,7 +36,7 @@ const KidsPageCards = () => {
     {
       id: 4,
       name: "Augustus Cuff Cargo",
-      price: "Rs 4,600.00",
+      price: "4600",
       image: "/assets/cargo2.jpg", // Replace with actual image path
       sizes: ["S", "M", "L", "XL", "2XL"],
       colors: ["#000080", "#d2b48c"],
@@ -45,7 +44,7 @@ const KidsPageCards = () => {
     {
         id: 5,
         name: "Augustus Cuff Cargo",
-        price: "Rs 4,600.00",
+        price: "4700",
         image: "/assets/cargo2.jpg", // Replace with actual image path
         sizes: ["S", "M", "L", "XL", "2XL"],
         colors: ["#000080", "#d2b48c"],
@@ -53,7 +52,7 @@ const KidsPageCards = () => {
       {
         id: 6,
         name: "MID CALF SOCK - 3 Pack",
-        price: "Rs 1,780.00",
+        price: "1700",
         image: "/assets/socks.jpg", // Replace with actual image path
         sizes: ["FREE SIZE"],
         colors: ["#000000", "#ffffff"],
@@ -62,40 +61,44 @@ const KidsPageCards = () => {
 
   const [selectedColor, setSelectedColor] = useState({});
   const [selectedSize, setSelectedSize] = useState({});
-
-  const { isLoggedIn } = useUserContext();
+  const { user } = useUserContext();
   const navigate = useNavigate();
 
-  const handleAddToCart = (itemId) => {
-    if (isLoggedIn) {
-      alert(`Item ${itemId} added to cart with size ${selectedSize[itemId]} and color ${selectedColor[itemId]}`);
-      navigate("/cart"); // Navigate to Add To Cart page
-    } else {
-      alert('Please login to add items to cart');
-      navigate("/login"); // Navigate to Login page
+  const handleAddToCart = async (item) => {
+    if (!user) {
+      alert("Please log in to add items to the cart!");
+      navigate("/login");
+      return;
+    }
+
+    try {
+      const cartItem = {
+        name: item.name,
+        color: selectedColor[item.id],
+        size: selectedSize[item.id],
+        price: item.price,
+        quantity: 1,
+        image: item.image,
+        userEmail: user.email,
+      };
+      await axios.post("http://localhost:8080/api/items/additem", cartItem);
+      alert("Item added to cart!");
+      navigate("/cart");
+    } catch (error) {
+      console.error("Failed to add item to cart:", error);
+      alert("Error adding item to cart!");
     }
   };
 
   return (
     <Box sx={{ padding: "20px" }}>
-
       <Typography variant="h4" align="center" sx={{ marginBottom: "20px" }}>
-        Kids's Collection
+        Kid's Collection
       </Typography>
-
       <Grid container spacing={4}>
-
-
         {mensCollection.map((item) => (
-
           <Grid item xs={12} sm={6} md={4} key={item.id}>
-
-            {/* One card create heare for all*/}
             <Card sx={{ boxShadow: 3 }}>
-
-
-
-              {/* Product Image */}
               <CardMedia
                 component="img"
                 height="300"
@@ -103,21 +106,13 @@ const KidsPageCards = () => {
                 alt={item.name}
                 sx={{ objectFit: "cover" }}
               />
-
-
-
-              {/* Product Details */}
               <CardContent>
                 <Typography variant="h6" gutterBottom>
                   {item.name}
                 </Typography>
                 <Typography variant="body1" sx={{ fontWeight: "bold", marginBottom: "10px" }}>
-                  {item.price}
+                  Rs {item.price}
                 </Typography>
-
-
-
-                {/* Color Selection */}
                 <Typography variant="body2" sx={{ marginBottom: "10px" }}>
                   Colors:
                 </Typography>
@@ -132,14 +127,9 @@ const KidsPageCards = () => {
                         backgroundColor: color,
                         border: selectedColor[item.id] === color ? "2px solid #000" : "1px solid #ccc",
                       }}
-                    ></IconButton>
+                    />
                   ))}
                 </Box>
-
-
-
-
-                {/* Size Selection */}
                 <Typography variant="body2" sx={{ marginBottom: "10px" }}>
                   Sizes:
                 </Typography>
@@ -155,45 +145,23 @@ const KidsPageCards = () => {
                         value={size}
                         control={<Radio />}
                         label={size}
-                        sx={{
-                          marginRight: "10px",
-                        }}
                       />
                     ))}
                   </RadioGroup>
                 </FormControl>
-
-
-
-
-
-                {/* Add to Cart Button */}
                 <Button
                   variant="contained"
                   fullWidth
-                  onClick={() => handleAddToCart(item.id)}
+                  onClick={() => handleAddToCart(item)}
                   disabled={!selectedSize[item.id] || !selectedColor[item.id]}
-                  sx={{
-                    marginTop: "10px",
-                    backgroundColor: "#000",
-                    color: "#fff",
-                    "&:hover": {
-                      backgroundColor: "#333",
-                    },
-                  }}
+                  sx={{ marginTop: "10px", backgroundColor: "#000", color: "#fff" }}
                 >
                   Add to Cart
                 </Button>
-
-
-
-                
               </CardContent>
             </Card>
           </Grid>
         ))}
-
-
       </Grid>
     </Box>
   );

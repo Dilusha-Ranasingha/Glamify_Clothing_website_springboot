@@ -1,7 +1,8 @@
 import React from "react";
-import { AppBar, Toolbar, Box, Button } from "@mui/material";
+import { AppBar, Toolbar, Box, Button, IconButton } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useUserContext } from "../../context/UserContext";
+import LocalMallIcon from '@mui/icons-material/LocalMall';
 
 const Header = () => {
 
@@ -104,10 +105,25 @@ const Header = () => {
               fontWeight: "bold",
               "&:hover": { color: "#1976d2" },
             }}
-            onClick={() => (isLoggedIn ? navigate("/account") : navigate("/login"))}
+            onClick={() => (isLoggedIn ? navigate("/account") : navigate("/login</Button>"))}
           >
             {isLoggedIn ? "My Account" : "Login"}
           </Button>
+
+
+          {/* Cart Button */}
+          {isLoggedIn && (
+            <IconButton
+              sx={{
+                color: "#000",
+                "&:hover": { color: "#1976d2" },
+              }}
+              onClick={() => navigate("/cart")}
+            >
+              <LocalMallIcon />
+            </IconButton>
+          )}
+
 
 
         </Box>

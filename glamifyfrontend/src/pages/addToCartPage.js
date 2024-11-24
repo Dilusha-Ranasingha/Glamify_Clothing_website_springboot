@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Typography,
@@ -19,54 +19,68 @@ import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useNavigate } from "react-router-dom";
-import Footer from "../components/Footer/Footer";
+import { useUserContext } from "../context/UserContext";
+import axios from "axios";
 import Header from "../components/Header/Header";
+import Footer from "../components/Footer/Footer";
 
 const AddToCartPage = () => {
   const navigate = useNavigate();
-
-  // Initial cart data
-  const [cartItems, setCartItems] = useState([
-    {
-      id: 1,
-      name: "MVT Compression Tee",
-      color: "MVT COMP TEE 02",
-      size: "XL",
-      price: 3800,
-      quantity: 1,
-      image: "/assets/compression-tee.jpg", // Replace with your actual image path
-    },
-    {
-      id: 2,
-      name: "Weeping Venom Tee",
-      color: "W VENOM TEE 02",
-      size: "XL",
-      price: 5000,
-      quantity: 1,
-      image: "/assets/venom-tee.jpg", // Replace with your actual image path
-    },
-  ]);
-
+  const { user } = useUserContext(); // Get logged-in user's details
+  const [cartItems, setCartItems] = useState([]); // Cart items state
   const [notes, setNotes] = useState(""); // For additional notes
   const [termsChecked, setTermsChecked] = useState(false); // Terms and conditions checkbox
 
-  // Update the quantity of an item
-  const updateQuantity = (id, increment) => {
-    const updatedCart = cartItems.map((item) =>
-      item.id === id
-        ? {
-            ...item,
-            quantity: Math.max(1, item.quantity + increment), // Ensure quantity is at least 1
-          }
-        : item
-    );
-    setCartItems(updatedCart);
+  // Fetch cart items for the logged-in user
+  useEffect(() => {
+    const fetchCartItems = async () => {
+      try {
+        const response = await axios.get("http://localhost:8080/api/items/getitemsbyuser", {
+          params: { email: user.email },
+        });
+        setCartItems(response.data);
+      } catch (error) {
+        console.error("Error fetching cart items:", error);
+        alert("Failed to fetch cart items.");
+      }
+    };
+
+    if (user && user.email) fetchCartItems();
+  }, [user]);
+
+  // Update the quantity of an item in the cart
+  const updateQuantity = async (id, increment) => {
+    const item = cartItems.find((item) => item.id === id);
+    const newQuantity = Math.max(1, item.quantity + increment);
+    try {
+      await axios.put("http://localhost:8080/api/items/updatequantity", null, {
+        params: { id, quantity: newQuantity },
+      });
+      setCartItems((prev) =>
+        prev.map((item) =>
+          item.id === id ? { ...item, quantity: newQuantity } : item
+        )
+      );
+    } catch (error) {
+      console.error("Error updating quantity:", error);
+      alert("Failed to update quantity.");
+    }
   };
 
   // Remove an item from the cart
-  const removeItem = (id) => {
-    const updatedCart = cartItems.filter((item) => item.id !== id);
-    setCartItems(updatedCart);
+  const removeItem = async (id) => {
+    const confirmation = window.confirm("Are you sure you want to delete this Item?");
+      if (confirmation) {
+        try {
+          await axios.delete("http://localhost:8080/api/items/deleteitem", {
+            params: { id },
+          });
+          setCartItems((prev) => prev.filter((item) => item.id !== id));
+        } catch (error) {
+          console.error("Error deleting item:", error);
+          alert("Failed to delete item.");
+        }
+      }
   };
 
   // Calculate the total price for a single row
@@ -78,192 +92,159 @@ const AddToCartPage = () => {
 
   return (
     <Box
-        sx={{
+      sx={{
         display: "flex",
         flexDirection: "column",
         minHeight: "100vh", // Full viewport height
-        }}
+      }}
     >
-        {/*header Section*/}
-        <Header />
+      {/* Header Section */}
+      <Header />
 
-        <Box sx={{ padding: "40px", maxWidth: "1200px", margin: "0 auto" }}>
-
-        
-
+      <Box sx={{ padding: "40px", maxWidth: "1200px", margin: "0 auto" }}>
         {/* Page Title */}
         <Typography variant="h4" sx={{ fontWeight: "bold", marginBottom: "20px" }}>
-                Your Cart
+          Your Cart
         </Typography>
 
         {/* Table Section */}
         <TableContainer component={Paper} sx={{ marginBottom: "40px" }}>
-
-            <Table>
-
-
+          <Table>
             <TableHead>
-                <TableRow>
+              <TableRow>
                 <TableCell><strong>Product</strong></TableCell>
                 <TableCell></TableCell>
                 <TableCell><strong>Quantity</strong></TableCell>
                 <TableCell><strong>Total</strong></TableCell>
-                </TableRow>
+              </TableRow>
             </TableHead>
 
-
-
             <TableBody>
-                {cartItems.map((item) => (
+              {cartItems.map((item) => (
                 <TableRow key={item.id}>
-
-
-
-                    {/* Product Image */}
-                    <TableCell>
+                  {/* Product Image */}
+                  <TableCell>
                     <Box
-                        component="img"
-                        src={item.image}
-                        alt={item.name}
-                        sx={{ width: "100px", height: "100px", objectFit: "cover" }}
+                      component="img"
+                      src={item.image}
+                      alt={item.name}
+                      sx={{ width: "100px", height: "100px", objectFit: "cover" }}
                     />
-                    </TableCell>
+                  </TableCell>
 
-
-
-                    {/* Product Details */}
-                    <TableCell>
+                  {/* Product Details */}
+                  <TableCell>
                     <Typography variant="body1" sx={{ fontWeight: "bold" }}>
-                        {item.name}
+                      {item.name}
                     </Typography>
                     <Typography variant="body2">
-                        <strong>Color:</strong> {item.color}
+                      <strong>Color:</strong> {item.color}
                     </Typography>
                     <Typography variant="body2">
-                        <strong>Size:</strong> {item.size}
+                      <strong>Size:</strong> {item.size}
                     </Typography>
-                    </TableCell>
+                  </TableCell>
 
-
-
-
-                    {/* Quantity Controls */}
-                    <TableCell>
+                  {/* Quantity Controls */}
+                  <TableCell>
                     <Box sx={{ display: "flex", alignItems: "center", gap: "10px" }}>
-                        <IconButton
+                      <IconButton
                         onClick={() => updateQuantity(item.id, -1)}
                         sx={{ border: "1px solid #ccc" }}
-                        >
+                      >
                         <RemoveIcon />
-                        </IconButton>
-                        <Typography>{item.quantity}</Typography>
-                        <IconButton
+                      </IconButton>
+                      <Typography>{item.quantity}</Typography>
+                      <IconButton
                         onClick={() => updateQuantity(item.id, 1)}
                         sx={{ border: "1px solid #ccc" }}
-                        >
+                      >
                         <AddIcon />
-                        </IconButton>
-                        <IconButton
+                      </IconButton>
+                      <IconButton
                         onClick={() => removeItem(item.id)}
                         sx={{ color: "red" }}
-                        >
+                      >
                         <DeleteIcon />
-                        </IconButton>
+                      </IconButton>
                     </Box>
-                    </TableCell>
+                  </TableCell>
 
-
-
-
-                    {/* Row Total */}
-                    <TableCell>
+                  {/* Row Total */}
+                  <TableCell>
                     <Typography>
-                        Rs {calculateRowTotal(item).toLocaleString()}
+                      Rs {calculateRowTotal(item).toLocaleString()}
                     </Typography>
-                    </TableCell>
-
-
-
+                  </TableCell>
                 </TableRow>
-                ))}
+              ))}
             </TableBody>
-
-
-
-
-            </Table>
-
+          </Table>
         </TableContainer>
-
-
-
 
         {/* Continue Shopping Section */}
         <Box
-            sx={{
+          sx={{
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
             marginBottom: "20px",
-            }}
+          }}
         >
-            <Button
+          <Button
             onClick={() => navigate("/")}
             sx={{
-                color: "#000",
-                textDecoration: "underline",
-                "&:hover": { textDecoration: "none" },
+              color: "#000",
+              textDecoration: "underline",
+              "&:hover": { textDecoration: "none" },
             }}
-            >
+          >
             Continue Shopping
-            </Button>
+          </Button>
 
-            <Box sx={{ display: "flex", alignItems: "center", gap: "20px" }}>
+          <Box sx={{ display: "flex", alignItems: "center", gap: "20px" }}>
             <TextField
-                placeholder="Add notes"
-                value={notes}
-                onChange={(e) => setNotes(e.target.value)}
-                sx={{ width: "300px" }}
+              placeholder="Add notes"
+              value={notes}
+              onChange={(e) => setNotes(e.target.value)}
+              sx={{ width: "300px" }}
             />
-            </Box>
+          </Box>
         </Box>
-
-
 
         {/* Terms and Conditions */}
         <FormControlLabel
-            control={
+          control={
             <Checkbox
-                checked={termsChecked}
-                onChange={(e) => setTermsChecked(e.target.checked)}
+              checked={termsChecked}
+              onChange={(e) => setTermsChecked(e.target.checked)}
             />
-            }
-            label={
+          }
+          label={
             <Typography>
-                I agree with the{" "}
-                <Button
+              I agree with the{" "}
+              <Button
                 component="a"
                 href="/terms"
                 sx={{
-                    textDecoration: "underline",
-                    color: "#000",
-                    padding: 0,
-                    "&:hover": { textDecoration: "none" },
+                  textDecoration: "underline",
+                  color: "#000",
+                  padding: 0,
+                  "&:hover": { textDecoration: "none" },
                 }}
-                >
+              >
                 terms and conditions
-                </Button>
+              </Button>
             </Typography>
-            }
+          }
         />
-
 
         {/* Checkout Button */}
         <Button
-            variant="contained"
-            fullWidth
-            disabled={!termsChecked || cartItems.length === 0}
-            sx={{
+          variant="contained"
+          fullWidth
+          disabled={!termsChecked || cartItems.length === 0}
+          sx={{
             marginTop: "20px",
             backgroundColor: "#000",
             color: "#fff",
@@ -272,21 +253,17 @@ const AddToCartPage = () => {
             padding: "15px",
             borderRadius: "30px",
             "&:hover": {
-                backgroundColor: "#333",
+              backgroundColor: "#333",
             },
-            }}
-            onClick={() => alert(`Checkout Total: Rs ${calculateCheckoutTotal().toLocaleString()}`)}
+          }}
+          onClick={() => alert(`Checkout Total: Rs ${calculateCheckoutTotal().toLocaleString()}`)}
         >
-            Checkout • Rs {calculateCheckoutTotal().toLocaleString()}
+          Checkout • Rs {calculateCheckoutTotal().toLocaleString()}
         </Button>
+      </Box>
 
-        </Box>
-
-
-        {/*Footer Section*/}
-        <Footer />
-
-
+      {/* Footer Section */}
+      <Footer />
     </Box>
   );
 };
