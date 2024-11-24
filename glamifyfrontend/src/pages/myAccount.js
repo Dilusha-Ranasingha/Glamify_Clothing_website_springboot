@@ -2,23 +2,38 @@ import { Box, Typography, Button, Divider } from "@mui/material";
 import Header from "../components/Header/Header";
 import Footer from "../components/Footer/Footer";
 import { useNavigate } from "react-router-dom";
+import { useUserContext } from "../context/UserContext";
 
 const MyAccountPage = () => {
   const navigate = useNavigate();
+  const { setIsLoggedIn, setUser } = useUserContext(); // Access context to handle login state and user data
 
   // Logout handler
   const handleLogout = () => {
-    navigate("/login");
+    setIsLoggedIn(false); // Set the login state to false
+    setUser(null); // Clear user data from context
+    navigate("/login"); // Navigate to the login page
   };
 
   // Update account handler
   const handleUpdateAccount = () => {
-    navigate("/update-account");
+    navigate("/update");
   };
 
   // Delete account handler
   const handleDeleteAccount = async () => {
-      navigate("/login");
+    const confirmation = window.confirm("Are you sure you want to delete your account?");
+
+    if (confirmation) {
+      // Simulate user account deletion
+      setIsLoggedIn(false); // Set the login state to false
+      setUser(null); // Clear user data from context
+
+      // Placeholder for backend API call to delete the user from the database
+      // Example: await deleteUserFromDatabase(user.id);
+
+      navigate("/"); // Navigate to the home page
+    }
   };
 
   return (
@@ -78,64 +93,55 @@ const MyAccountPage = () => {
             Account Details
           </Typography>
           <Divider sx={{ marginBottom: "20px" }} />
-            <Box sx={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-              <Typography>
-                <strong>First Name:</strong> {}
-              </Typography>
-              <Typography>
-                <strong>Last Name:</strong> {}
-              </Typography>
-              <Typography>
-                <strong>Email:</strong> {}
-              </Typography>
-              <Typography>
-                <strong>Phone:</strong> {}
-              </Typography>
+          <Box sx={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+            <Typography>
+              <strong>First Name:</strong> {}
+            </Typography>
+            <Typography>
+              <strong>Last Name:</strong> {}
+            </Typography>
+            <Typography>
+              <strong>Email:</strong> {}
+            </Typography>
+            <Typography>
+              <strong>Password:</strong> {}
+            </Typography>
 
-              {/* Update and Delete Buttons */}
-                <Box sx={{ display: "flex", gap: "20px" }}>
+            {/* Update and Delete Buttons */}
+            <Box sx={{ display: "flex", gap: "20px" }}>
+              <Button
+                onClick={handleUpdateAccount}
+                sx={{
+                  backgroundColor: "#000",
+                  color: "#fff",
+                  fontWeight: "bold",
+                  padding: "10px 20px",
+                  borderRadius: "8px",
+                  "&:hover": {
+                    backgroundColor: "#333",
+                  },
+                }}
+              >
+                Update Account
+              </Button>
 
-
-                    
-                    <Button
-                    onClick={handleUpdateAccount}
-                    sx={{
-                        backgroundColor: "#000",
-                        color: "#fff",
-                        fontWeight: "bold",
-                        padding: "10px 20px",
-                        borderRadius: "8px",
-                        "&:hover": {
-                        backgroundColor: "#333",
-                        },
-                    }}
-                    >
-                    Update Account
-                    </Button>
-
-
-
-
-                    <Button
-                    onClick={handleDeleteAccount}
-                    sx={{
-                        backgroundColor: "#d32f2f",
-                        color: "#fff",
-                        fontWeight: "bold",
-                        padding: "10px 20px",
-                        borderRadius: "8px",
-                        "&:hover": {
-                        backgroundColor: "#b71c1c",
-                        },
-                    }}
-                    >
-                    Delete Account
-                    </Button>
-
-
-
-                </Box>
+              <Button
+                onClick={handleDeleteAccount}
+                sx={{
+                  backgroundColor: "#d32f2f",
+                  color: "#fff",
+                  fontWeight: "bold",
+                  padding: "10px 20px",
+                  borderRadius: "8px",
+                  "&:hover": {
+                    backgroundColor: "#b71c1c",
+                  },
+                }}
+              >
+                Delete Account
+              </Button>
             </Box>
+          </Box>
         </Box>
       </Box>
 

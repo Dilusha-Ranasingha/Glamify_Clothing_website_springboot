@@ -16,9 +16,9 @@ const Carousel = () => {
   };
 
   const carouselImages = [
-    "/assets/image1.jpg", // Replace with your image paths
-    "/assets/image2.jpg",
-    "/assets/image3.jpg",
+    "/assets/banner1.jpg", // Replace with your image paths
+    "/assets/banner2.jpg",
+    "/assets/banner3.jpg",
   ];
 
   return (

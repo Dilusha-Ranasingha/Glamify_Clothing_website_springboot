@@ -4,6 +4,8 @@ import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
+import { useUserContext } from "../../context/UserContext";
+import { useNavigate } from "react-router-dom";
 
 const KidsPageCards = () => {
   // Sample collection data
@@ -40,13 +42,38 @@ const KidsPageCards = () => {
       sizes: ["S", "M", "L", "XL", "2XL"],
       colors: ["#000080", "#d2b48c"],
     },
+    {
+        id: 5,
+        name: "Augustus Cuff Cargo",
+        price: "Rs 4,600.00",
+        image: "/assets/cargo2.jpg", // Replace with actual image path
+        sizes: ["S", "M", "L", "XL", "2XL"],
+        colors: ["#000080", "#d2b48c"],
+      },
+      {
+        id: 6,
+        name: "MID CALF SOCK - 3 Pack",
+        price: "Rs 1,780.00",
+        image: "/assets/socks.jpg", // Replace with actual image path
+        sizes: ["FREE SIZE"],
+        colors: ["#000000", "#ffffff"],
+      },
   ];
 
   const [selectedColor, setSelectedColor] = useState({});
   const [selectedSize, setSelectedSize] = useState({});
 
+  const { isLoggedIn } = useUserContext();
+  const navigate = useNavigate();
+
   const handleAddToCart = (itemId) => {
-    alert(`Item ${itemId} added to cart with size ${selectedSize[itemId]} and color ${selectedColor[itemId]}`);
+    if (isLoggedIn) {
+      alert(`Item ${itemId} added to cart with size ${selectedSize[itemId]} and color ${selectedColor[itemId]}`);
+      navigate("/cart"); // Navigate to Add To Cart page
+    } else {
+      alert('Please login to add items to cart');
+      navigate("/login"); // Navigate to Login page
+    }
   };
 
   return (

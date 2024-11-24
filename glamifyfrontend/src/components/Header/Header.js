@@ -1,10 +1,12 @@
 import React from "react";
-import { AppBar, Toolbar, Typography, Box, Button } from "@mui/material";
+import { AppBar, Toolbar, Box, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { useUserContext } from "../../context/UserContext";
 
 const Header = () => {
 
     const navigate = useNavigate();
+    const { isLoggedIn } = useUserContext(); // Access login state by usercontext
 
   return (
     <AppBar position="static" sx={{ backgroundColor: "#fff", color: "#000" }}>
@@ -14,13 +16,11 @@ const Header = () => {
         {/* Logo Section */}
         <Box sx={{ display: "flex", alignItems: "center" }}>
           <img
-            src="/assets/logo.png" // Replace with the path to your logo image
+            src="/assets/logo.png"
             alt="Logo"
-            style={{ width: 50, height: 50, marginRight: "10px" }}
+            style={{ width: 70, height: 70, marginRight: "10px" }}
+            onClick={() =>navigate("/")}
           />
-          <Typography variant="h6" component="div" sx={{ fontWeight: "bold" }} onClick={() =>navigate("/")} >
-            Glamify
-          </Typography>
         </Box>
 
         {/* Navigation Links */}
@@ -76,6 +76,7 @@ const Header = () => {
               fontWeight: "bold",
               "&:hover": { color: "#1976d2" },
             }}
+            onClick={() => navigate("/accessories")}
           >
             Accessories
           </Button>
@@ -88,12 +89,14 @@ const Header = () => {
               fontWeight: "bold",
               "&:hover": { color: "#1976d2" },
             }}
+            onClick ={()=>navigate("/footwear")}
           >
             Footwear
           </Button>
 
 
 
+          {/* Login or My Account checking */}
           <Button
             sx={{
               color: "#000",
@@ -101,9 +104,9 @@ const Header = () => {
               fontWeight: "bold",
               "&:hover": { color: "#1976d2" },
             }}
-            onClick={() =>navigate("/login")}
+            onClick={() => (isLoggedIn ? navigate("/account") : navigate("/login"))}
           >
-            Login
+            {isLoggedIn ? "My Account" : "Login"}
           </Button>
 
 

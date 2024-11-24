@@ -2,15 +2,23 @@ import React, { useState } from "react";
 import { Box, TextField, Typography, Button, Link } from "@mui/material";
 import Header from "../components/Header/Header";
 import Footer from "../components/Footer/Footer";
+import { useNavigate } from "react-router-dom";
+import { useUserContext } from "../context/UserContext";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const { setIsLoggedIn } = useUserContext(); // Access setIsLoggedIn from context
+  const navigate = useNavigate();
 
   const handleLogin = () => {
-    // Handle login logic here
-    console.log("Email:", email);
-    console.log("Password:", password);
+    // Simulate login logic
+    if (email === "user@example.com" && password === "password") {
+      setIsLoggedIn(true); // Update login state
+      navigate("/my-account"); // Redirect to My Account
+    } else {
+      alert("Invalid credentials!");
+    }
   };
 
   return (

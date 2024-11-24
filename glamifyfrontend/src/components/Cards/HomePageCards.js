@@ -4,6 +4,8 @@ import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
+import { useNavigate } from "react-router-dom";
+import { useUserContext } from "../../context/UserContext";
 
 const HomePageCards = () => {
   // Sample collection data
@@ -61,8 +63,17 @@ const HomePageCards = () => {
   const [selectedColor, setSelectedColor] = useState({});
   const [selectedSize, setSelectedSize] = useState({});
 
+  const { isLoggedIn } = useUserContext();
+  const navigate = useNavigate();
+
   const handleAddToCart = (itemId) => {
-    alert(`Item ${itemId} added to cart with size ${selectedSize[itemId]} and color ${selectedColor[itemId]}`);
+    if (isLoggedIn) {
+      alert(`Item ${itemId} added to cart with size ${selectedSize[itemId]} and color ${selectedColor[itemId]}`);
+      navigate("/cart"); // Navigate to Add To Cart page
+    } else {
+      alert('Please login to add items to cart');
+      navigate("/login"); // Navigate to Login page
+    }
   };
 
   return (

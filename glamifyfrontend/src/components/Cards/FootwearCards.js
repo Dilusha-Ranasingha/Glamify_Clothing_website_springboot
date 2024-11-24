@@ -4,10 +4,10 @@ import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
-import { useUserContext } from "../../context/UserContext";
 import { useNavigate } from "react-router-dom";
+import { useUserContext } from "../../context/UserContext";
 
-const WomensPageCards = () => {
+const FootwearCards = () => {
   // Sample collection data
   const mensCollection = [
     {
@@ -80,7 +80,7 @@ const WomensPageCards = () => {
     <Box sx={{ padding: "20px" }}>
 
       <Typography variant="h4" align="center" sx={{ marginBottom: "20px" }}>
-        Women's Collection
+        Footwear's Collection
       </Typography>
 
       <Grid container spacing={4}>
@@ -199,4 +199,4 @@ const WomensPageCards = () => {
   );
 };
 
-export default WomensPageCards;
+export default FootwearCards;
