@@ -4,20 +4,31 @@ import Header from "../components/Header/Header";
 import Footer from "../components/Footer/Footer";
 import { useNavigate } from "react-router-dom";
 import { useUserContext } from "../context/UserContext";
+import axios from "axios"; // For backend API calls
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { setIsLoggedIn } = useUserContext(); // Access setIsLoggedIn from context
+  const { setIsLoggedIn, setUser } = useUserContext(); // Access context methods
   const navigate = useNavigate();
 
-  const handleLogin = () => {
-    // Simulate login logic
-    if (email === "user@example.com" && password === "password") {
-      setIsLoggedIn(true); // Update login state
-      navigate("/my-account"); // Redirect to My Account
-    } else {
-      alert("Invalid credentials!");
+  const handleLogin = async () => {
+    try {
+      // Send POST request to the backend for authentication
+      const response = await axios.post("http://localhost:8080/api/user/login", { email, password });
+
+      // Check if login is successful
+      if (response.status === 200) {
+        const userData = response.data; // Assuming backend returns user data
+        setIsLoggedIn(true); // Set user as logged in
+        setUser(userData); // Set user details in context
+        navigate("/"); // Redirect to the home page
+      } else {
+        alert("Invalid credentials!");
+      }
+    } catch (error) {
+      console.error("Login error:", error);
+      alert("Invalid credentials! Please try again.");
     }
   };
 

@@ -4,27 +4,32 @@ import Footer from "../components/Footer/Footer";
 import { useNavigate } from "react-router-dom";
 import { useUserContext } from "../context/UserContext";
 import { useState, useEffect } from "react";
+import axios from "axios"; // For API calls
 
 const MyAccountPage = () => {
   const navigate = useNavigate();
-  const { setIsLoggedIn, setUser } = useUserContext(); // Access context to handle login state and user data
+  const { user, setIsLoggedIn, setUser } = useUserContext(); // Access user context
   const [userDetails, setUserDetails] = useState(null);
 
-  // Simulating fetching user data
+  // Fetch user details dynamically from the backend
   useEffect(() => {
-    // Replace this with an actual API call to fetch user data
     const fetchUserData = async () => {
-      const sampleData = {
-        firstName: "John",
-        lastName: "Doe",
-        email: "john.doe@example.com",
-        password: "********", // Masked for security
-      };
-      setUserDetails(sampleData);
+      if (user?.id) {
+        try {
+          // Ensure the API endpoint is correct
+          const response = await axios.get(`http://localhost:8080/api/user/getuserbyid`, {
+            params: { id: user.id }, // Pass the user ID as a query parameter
+          });
+          setUserDetails(response.data);
+        } catch (error) {
+          console.error("Error fetching user details:", error);
+          alert("Failed to fetch user details.");
+        }
+      }
     };
 
     fetchUserData();
-  }, []);
+  }, [user]);
 
   // Logout handler
   const handleLogout = () => {
@@ -41,16 +46,18 @@ const MyAccountPage = () => {
   // Delete account handler
   const handleDeleteAccount = async () => {
     const confirmation = window.confirm("Are you sure you want to delete your account?");
-
-    if (confirmation) {
-      // Simulate user account deletion
-      setIsLoggedIn(false); // Set the login state to false
-      setUser(null); // Clear user data from context
-
-      // Placeholder for backend API call to delete the user from the database
-      // Example: await deleteUserFromDatabase(user.id);
-
-      navigate("/"); // Navigate to the home page
+    if (confirmation && userDetails) {
+      try {
+        await axios.delete(`http://localhost:8080/api/user/deleteuser`, {
+          data: { id: userDetails.id },
+        });
+        setIsLoggedIn(false); // Log out after deletion
+        setUser(null); // Clear user data
+        navigate("/"); // Navigate to home page
+      } catch (error) {
+        console.error("Error deleting account:", error);
+        alert("Failed to delete account.");
+      }
     }
   };
 
@@ -124,7 +131,7 @@ const MyAccountPage = () => {
                   <strong>Email:</strong> {userDetails.email}
                 </Typography>
                 <Typography>
-                  <strong>Password:</strong> {userDetails.password}
+                  <strong>Password:</strong> ********
                 </Typography>
               </>
             ) : (

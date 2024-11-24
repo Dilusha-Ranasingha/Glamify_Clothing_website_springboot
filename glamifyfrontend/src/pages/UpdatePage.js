@@ -4,6 +4,7 @@ import Header from "../components/Header/Header";
 import Footer from "../components/Footer/Footer";
 import { useUserContext } from "../context/UserContext";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const UpdatePage = () => {
   const { user, setUser } = useUserContext(); // Access and update user details
@@ -15,9 +16,21 @@ const UpdatePage = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleUpdate = () => {
-    setUser(formData); // Update user details in context
-    navigate("/account"); // Navigate back to MyAccountPage
+  const handleUpdate = async () => {
+    try {
+      // Make an API call to update the user details
+      const response = await axios.put(`http://localhost:8080/api/user/updateuser`, formData);
+
+      // Update user details in context after successful API call
+      setUser(response.data);
+      alert("Account updated successfully!");
+
+      // Navigate back to MyAccountPage
+      navigate("/account");
+    } catch (error) {
+      console.error("Error updating account:", error);
+      alert("Failed to update account. Please try again.");
+    }
   };
 
   return (
