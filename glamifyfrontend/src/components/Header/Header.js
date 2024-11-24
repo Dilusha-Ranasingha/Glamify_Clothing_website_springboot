@@ -1,13 +1,33 @@
-import React from "react";
-import { AppBar, Toolbar, Box, Button, IconButton } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { AppBar, Toolbar, Box, Button, IconButton, Badge } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useUserContext } from "../../context/UserContext";
 import LocalMallIcon from '@mui/icons-material/LocalMall';
+import axios from "axios";
 
 const Header = () => {
 
     const navigate = useNavigate();
-    const { isLoggedIn } = useUserContext(); // Access login state by usercontext
+    const { isLoggedIn , user} = useUserContext(); // Access login state by usercontext
+    const [cartItemCount, setCartItemCount] = useState(0);
+
+  // Fetch cart item count for logged-in user
+  useEffect(() => {
+    const fetchCartItemCount = async () => {
+      if (isLoggedIn && user) {
+        try {
+          const response = await axios.get("http://localhost:8080/api/items/getitemsbyuser", {
+            params: { email: user.email },
+          });
+          setCartItemCount(response.data.length); // Set the count to the number of items
+        } catch (error) {
+          console.error("Error fetching cart items:", error);
+        }
+      }
+    };
+
+    fetchCartItemCount();
+  }, [isLoggedIn, user]);
 
   return (
     <AppBar position="static" sx={{ backgroundColor: "#fff", color: "#000" }}>
@@ -120,7 +140,15 @@ const Header = () => {
               }}
               onClick={() => navigate("/cart")}
             >
-              <LocalMallIcon />
+              <Badge badgeContent={cartItemCount} 
+              sx={{
+                  "& .MuiBadge-badge": {
+                    backgroundColor: "#000", // Set badge background to black
+                    color: "#fff", // Set badge text color to white
+                  },
+                }}>
+                <LocalMallIcon />
+              </Badge>
             </IconButton>
           )}
 
