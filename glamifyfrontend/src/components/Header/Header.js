@@ -105,7 +105,7 @@ const Header = () => {
               fontWeight: "bold",
               "&:hover": { color: "#1976d2" },
             }}
-            onClick={() => (isLoggedIn ? navigate("/account") : navigate("/login</Button>"))}
+            onClick={() => (isLoggedIn ? navigate("/account") : navigate("/login"))}
           >
             {isLoggedIn ? "My Account" : "Login"}
           </Button>
