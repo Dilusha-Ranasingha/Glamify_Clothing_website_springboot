@@ -2,19 +2,38 @@ import React, { useState } from "react";
 import { Box, TextField, Typography, Button, Link, Grid } from "@mui/material";
 import Header from "../components/Header/Header";
 import Footer from "../components/Footer/Footer";
+import axios from "axios"; // Import axios for making HTTP requests
+import { useNavigate } from "react-router-dom";
 
 const RegisterPage = () => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState(""); // For displaying error messages
+  const navigate = useNavigate();
 
-  const handleRegister = () => {
-    // Handle registration logic here
-    console.log("First Name:", firstName);
-    console.log("Last Name:", lastName);
-    console.log("Email:", email);
-    console.log("Password:", password);
+  const handleRegister = async () => {
+    // Create a user object
+    const userData = {
+      firstName,
+      lastName,
+      email,
+      password,
+    };
+
+    try {
+      // Send POST request to backend
+      const response = await axios.post("http://localhost:8080/api/user/adduser", userData);
+      console.log("User registered successfully:", response.data);
+
+      // Navigate to login page on successful registration
+      alert("Account created successfully! Please log in.");
+      navigate("/login");
+    } catch (error) {
+      console.error("Error registering user:", error);
+      setError("Registration failed. Please try again.");
+    }
   };
 
   return (
@@ -40,6 +59,13 @@ const RegisterPage = () => {
         <Typography variant="body1" sx={{ marginBottom: "30px", color: "#555" }}>
           Enter your information below to proceed. If you already have an account, please log in instead.
         </Typography>
+
+        {/* Error Message */}
+        {error && (
+          <Typography variant="body2" sx={{ color: "red", marginBottom: "10px" }}>
+            {error}
+          </Typography>
+        )}
 
         {/* Register Form */}
         <Box

@@ -3,10 +3,28 @@ import Header from "../components/Header/Header";
 import Footer from "../components/Footer/Footer";
 import { useNavigate } from "react-router-dom";
 import { useUserContext } from "../context/UserContext";
+import { useState, useEffect } from "react";
 
 const MyAccountPage = () => {
   const navigate = useNavigate();
   const { setIsLoggedIn, setUser } = useUserContext(); // Access context to handle login state and user data
+  const [userDetails, setUserDetails] = useState(null);
+
+  // Simulating fetching user data
+  useEffect(() => {
+    // Replace this with an actual API call to fetch user data
+    const fetchUserData = async () => {
+      const sampleData = {
+        firstName: "John",
+        lastName: "Doe",
+        email: "john.doe@example.com",
+        password: "********", // Masked for security
+      };
+      setUserDetails(sampleData);
+    };
+
+    fetchUserData();
+  }, []);
 
   // Logout handler
   const handleLogout = () => {
@@ -94,18 +112,24 @@ const MyAccountPage = () => {
           </Typography>
           <Divider sx={{ marginBottom: "20px" }} />
           <Box sx={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-            <Typography>
-              <strong>First Name:</strong> {}
-            </Typography>
-            <Typography>
-              <strong>Last Name:</strong> {}
-            </Typography>
-            <Typography>
-              <strong>Email:</strong> {}
-            </Typography>
-            <Typography>
-              <strong>Password:</strong> {}
-            </Typography>
+            {userDetails ? (
+              <>
+                <Typography>
+                  <strong>First Name:</strong> {userDetails.firstName}
+                </Typography>
+                <Typography>
+                  <strong>Last Name:</strong> {userDetails.lastName}
+                </Typography>
+                <Typography>
+                  <strong>Email:</strong> {userDetails.email}
+                </Typography>
+                <Typography>
+                  <strong>Password:</strong> {userDetails.password}
+                </Typography>
+              </>
+            ) : (
+              <Typography>Loading user details...</Typography>
+            )}
 
             {/* Update and Delete Buttons */}
             <Box sx={{ display: "flex", gap: "20px" }}>
