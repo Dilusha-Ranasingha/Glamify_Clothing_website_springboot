@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Box, Grid, Card, CardMedia, CardContent, Typography, Button, IconButton } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { Box, Grid2 as Grid, Card, CardMedia, CardContent, Typography, Button, IconButton } from "@mui/material";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -9,60 +9,25 @@ import { useNavigate } from "react-router-dom";
 import { useUserContext } from "../../context/UserContext";
 
 const HomePageCards = () => {
-  const mensCollection = [
-    {id: 1,
-      name: "MID CALF SOCK - 3 Pack",
-      price: "1780",
-      image: "/assets/socks.jpg", // Replace with actual image path
-      sizes: ["FREE SIZE"],
-      colors: ["#000000", "#ffffff"],
-    },
-    {
-      id: 2,
-      name: "Andor Cargo Pant",
-      price: "4600",
-      image: "/assets/cargo1.jpg", // Replace with actual image path
-      sizes: ["M", "L", "XL", "2XL"],
-      colors: ["#000080", "#d2b48c"],
-    },
-    {
-      id: 3,
-      name: "LXC Tee",
-      price: "3000",
-      image: "/assets/tee.jpg", // Replace with actual image path
-      sizes: ["S", "M", "L", "XL", "2XL"],
-      colors: ["#000000", "#ffffff"],
-    },
-    {
-      id: 4,
-      name: "Augustus Cuff Cargo",
-      price: "4600",
-      image: "/assets/cargo2.jpg", // Replace with actual image path
-      sizes: ["S", "M", "L", "XL", "2XL"],
-      colors: ["#000080", "#d2b48c"],
-    },
-    {
-        id: 5,
-        name: "Augustus Cuff Cargo",
-        price: "4700",
-        image: "/assets/cargo2.jpg", // Replace with actual image path
-        sizes: ["S", "M", "L", "XL", "2XL"],
-        colors: ["#000080", "#d2b48c"],
-      },
-      {
-        id: 6,
-        name: "MID CALF SOCK - 3 Pack",
-        price: "1700",
-        image: "/assets/socks.jpg", // Replace with actual image path
-        sizes: ["FREE SIZE"],
-        colors: ["#000000", "#ffffff"],
-      },
-  ];
-
+  const [cards, setCards] = useState([]);
   const [selectedColor, setSelectedColor] = useState({});
   const [selectedSize, setSelectedSize] = useState({});
   const { user } = useUserContext();
   const navigate = useNavigate();
+
+  // Fetch cards data on component mount
+  useEffect(() => {
+    const fetchCards = async () => {
+      try {
+        const response = await axios.get("http://localhost:8080/api/cards/getall");
+        setCards(response.data);
+      } catch (error) {
+        console.error("Failed to fetch cards:", error);
+        alert("Error fetching cards!");
+      }
+    };
+    fetchCards();
+  }, []); // Run only once on component mount
 
   const handleAddToCart = async (item) => {
     if (!user) {
@@ -81,7 +46,9 @@ const HomePageCards = () => {
         image: item.image,
         userEmail: user.email,
       };
-      await axios.post("http://localhost:8080/api/items/additem", cartItem);
+
+      // Make a POST request to add the item to the cart
+      await axios.post("http://localhost:8080/api/cart/add", cartItem);
       alert("Item added to cart!");
       navigate("/cart");
     } catch (error) {
@@ -96,13 +63,13 @@ const HomePageCards = () => {
         New Collection
       </Typography>
       <Grid container spacing={4}>
-        {mensCollection.map((item) => (
+        {cards.map((item) => (
           <Grid item xs={12} sm={6} md={4} key={item.id}>
             <Card sx={{ boxShadow: 3 }}>
               <CardMedia
                 component="img"
                 height="300"
-                image={item.image}
+                image={`data:image/jpeg;base64,${item.image}`}
                 alt={item.name}
                 sx={{ objectFit: "cover" }}
               />

@@ -15,6 +15,7 @@ import AddToCartPage from './pages/addToCartPage';
 import UpdatePage from './pages/UpdatePage';
 import FootwearPage from './pages/FootwearPage';
 import AccessoriesPage from './pages/AccessoriesPage';
+import AdminPage from './pages/AdminPage';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -32,6 +33,7 @@ root.render(
         <Route path='/update' element={<UpdatePage />} />
         <Route path='/accessories' elemtnt={<AccessoriesPage />} />
         <Route path='/footwear' element={<FootwearPage />} />
+        <Route path='/admin' element={<AdminPage />} />
       </Routes>
     </BrouwserRouter>
   </UserProvider>
