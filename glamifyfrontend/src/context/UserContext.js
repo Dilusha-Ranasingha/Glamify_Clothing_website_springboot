@@ -9,15 +9,22 @@ export const UserProvider = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   // State to manage user details
-  const [user, setUser] = useState({
-    firstName: "John",
-    lastName: "Doe",
-    email: "johndoe@example.com",
-    password: "password123", // Example password
-  });
+  const [user, setUser] = useState(null);
+
+  // Function to handle user login
+  const login = (userData) => {
+    setUser(userData);
+    setIsLoggedIn(true);
+  };
+
+  // Function to handle user logout
+  const logout = () => {
+    setUser(null);
+    setIsLoggedIn(false);
+  };
 
   return (
-    <UserContext.Provider value={{ isLoggedIn, setIsLoggedIn, user, setUser }}>
+    <UserContext.Provider value={{ isLoggedIn, setIsLoggedIn, user, setUser, login, logout }}>
       {children}
     </UserContext.Provider>
   );
