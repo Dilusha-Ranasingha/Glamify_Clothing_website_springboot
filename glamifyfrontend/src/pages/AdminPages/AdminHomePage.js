@@ -1,5 +1,6 @@
-import { Box, Typography } from "@mui/material";
+import { Box } from "@mui/material";
 import HeaderAdmin from "../../components/Header/HeaderAdmin";
+import AdminPanelHome from "./AdminPanelHome";
 
 const AdminHomePage = () => {
     return (
@@ -13,10 +14,9 @@ const AdminHomePage = () => {
             {/* Admin Header section */}
             <HeaderAdmin />
 
-            {/* Welcome Section */}
-            <Typography variant="h4" align="center" sx={{ marginTop: "20px" }}>
-                Admin Home Page
-            </Typography>
+            <AdminPanelHome />
+
+           
 
             
         </Box>
