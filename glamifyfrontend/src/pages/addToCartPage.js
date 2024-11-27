@@ -124,12 +124,12 @@ const AddToCartPage = () => {
                 <TableRow key={item.id}>
                   {/* Product Image */}
                   <TableCell>
-                    <Box
-                      component="img"
-                      src={item.image}
-                      alt={item.name}
-                      sx={{ width: "100px", height: "100px", objectFit: "cover" }}
-                    />
+                  <Box
+                    component="img"
+                    src={`data:image/jpeg;base64,${decodeURIComponent(escape(window.atob(item.image)))}`}
+                    alt={item.name}
+                    sx={{ width: "100px", height: "100px", objectFit: "cover" }}
+                  />
                   </TableCell>
 
                   {/* Product Details */}

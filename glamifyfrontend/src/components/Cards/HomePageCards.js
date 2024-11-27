@@ -47,8 +47,10 @@ const HomePageCards = () => {
         userEmail: user.email,
       };
 
+      console.log("Payload being sent to Add to Cart:", cartItem);
+
       // Make a POST request to add the item to the cart
-      await axios.post("http://localhost:8080/api/cart/add", cartItem);
+      await axios.post("http://localhost:8080/api/items/additem", cartItem);
       alert("Item added to cart!");
       navigate("/cart");
     } catch (error) {
