@@ -61,7 +61,7 @@ const HomePageCards = () => {
 
   return (
     <Box sx={{ padding: "20px" }}>
-      <Typography variant="h4" align="center" sx={{ marginBottom: "20px" }}>
+      <Typography variant="h4" align="center" sx={{ marginBottom: "20px" ,fontFamily: "sans-serif", fontWeight: "bold"}}>
         New Collection
       </Typography>
       <Grid container spacing={4}>
@@ -70,7 +70,7 @@ const HomePageCards = () => {
             <Card sx={{ boxShadow: 3 }}>
               <CardMedia
                 component="img"
-                height="300"
+                height="500"
                 image={`data:image/jpeg;base64,${item.image}`}
                 alt={item.name}
                 sx={{ objectFit: "cover" }}

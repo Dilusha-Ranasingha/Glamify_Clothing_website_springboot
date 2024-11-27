@@ -1,7 +1,7 @@
 import React from "react";
 import Header from "../components/Header/Header";
 import Footer from "../components/Footer/Footer";
-import { Typography, Box } from "@mui/material";
+import { Box } from "@mui/material";
 import Categories from "../components/Categories/Categories";
 import Carousel from "../components/Carousel/Carousel";
 import HomePageCards from "../components/Cards/HomePageCards";
@@ -16,7 +16,7 @@ const HomePage = () => {
         minHeight: "100vh", // Full viewport height
       }}
     >
-
+    
 
      {/*header Section*/}
       <Header />
@@ -35,10 +35,7 @@ const HomePage = () => {
         <Carousel />
 
 
-        {/* Welcome Section */}
-        <Typography variant="h4" align="center" sx={{ marginTop: "20px" }}>
-          Welcome to Glamify
-        </Typography>
+        
 
 
         {/* Categories Section */}

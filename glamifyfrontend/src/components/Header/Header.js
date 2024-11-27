@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { AppBar, Toolbar, Box, Button, IconButton, Badge } from "@mui/material";
+import { AppBar, Toolbar, Box, Button, IconButton, Badge, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useUserContext } from "../../context/UserContext";
 import LocalMallIcon from '@mui/icons-material/LocalMall';
@@ -31,6 +31,12 @@ const Header = () => {
 
   return (
     <AppBar position="static" sx={{ backgroundColor: "#fff", color: "#000" }}>
+
+      {/* Black Line with Text */}
+      <Box sx={{ backgroundColor: "#000", color: "#fff", textAlign: "center", py: 1 }}>
+        <Typography variant="body1">30 DAY RETURNED</Typography>
+      </Box>
+      
       <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
 
 
@@ -53,6 +59,8 @@ const Header = () => {
               color: "#000",
               textTransform: "capitalize",
               fontWeight: "bold",
+              fontFamily: "sans-serif",
+              fontSize: "1.1rem", // Increase text size
               "&:hover": { color: "#1976d2" },
             }}
             onClick={() =>navigate("/men")}
@@ -66,6 +74,8 @@ const Header = () => {
               color: "#000",
               textTransform: "capitalize",
               fontWeight: "bold",
+              fontFamily: "sans-serif",
+              fontSize: "1.1rem", // Increase text size
               "&:hover": { color: "#1976d2" },
             }}
             onClick={() =>navigate("/women")}
@@ -80,6 +90,8 @@ const Header = () => {
               color: "#000",
               textTransform: "capitalize",
               fontWeight: "bold",
+              fontFamily: "sans-serif",
+              fontSize: "1.1rem", // Increase text size
               "&:hover": { color: "#1976d2" },
             }}
             onClick={() =>navigate("/kids")}
@@ -95,6 +107,8 @@ const Header = () => {
               color: "#000",
               textTransform: "capitalize",
               fontWeight: "bold",
+              fontFamily: "sans-serif",
+              fontSize: "1.1rem", // Increase text size
               "&:hover": { color: "#1976d2" },
             }}
             onClick={() => navigate("/accessories")}
@@ -108,6 +122,8 @@ const Header = () => {
               color: "#000",
               textTransform: "capitalize",
               fontWeight: "bold",
+              fontFamily: "sans-serif",
+              fontSize: "1.1rem", // Increase text size
               "&:hover": { color: "#1976d2" },
             }}
             onClick ={()=>navigate("/footwear")}
@@ -123,6 +139,8 @@ const Header = () => {
               color: "#000",
               textTransform: "capitalize",
               fontWeight: "bold",
+              fontFamily: "sans-serif",
+              fontSize: "1.1rem", // Increase text size
               "&:hover": { color: "#1976d2" },
             }}
             onClick={() => (isLoggedIn ? navigate("/account") : navigate("/login"))}

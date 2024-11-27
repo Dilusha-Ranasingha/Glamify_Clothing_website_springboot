@@ -26,7 +26,7 @@ const Categories = () => {
 
   return (
     <Box>
-      <Typography variant="h5" align="center" sx={{ marginTop: "40px", fontWeight: "bold" }}>
+      <Typography variant="h5" align="center" sx={{ marginTop: "40px", fontFamily: "sans-serif", fontWeight: "bold" }}>
         Who Are You Shopping For?
       </Typography>
 

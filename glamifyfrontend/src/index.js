@@ -15,7 +15,12 @@ import AddToCartPage from './pages/addToCartPage';
 import UpdatePage from './pages/UpdatePage';
 import FootwearPage from './pages/FootwearPage';
 import AccessoriesPage from './pages/AccessoriesPage';
-import AdminPage from './pages/AdminPage';
+import AdminPage from './pages/AdminPages/AdminPage';
+import AdminPageMen from './pages/AdminPages/AdminPageMen';
+import AdminPageWomen from './pages/AdminPages/AdminPageWomen';
+import AdminPageKids from './pages/AdminPages/AdminPageKids';
+import AdminPageFootwear from './pages/AdminPages/AdminFootwear';
+import AdminHomePage from './pages/AdminPages/AdminHomePage';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -34,6 +39,11 @@ root.render(
         <Route path='/accessories' elemtnt={<AccessoriesPage />} />
         <Route path='/footwear' element={<FootwearPage />} />
         <Route path='/admin' element={<AdminPage />} />
+        <Route path='/adminmen' element={<AdminPageMen />} />
+        <Route path='/adminwomen' element={<AdminPageWomen />} />
+        <Route path='/adminkids' element={<AdminPageKids />} />
+        <Route path='/adminfootwear' element={<AdminPageFootwear />} />
+        <Route path='/adminhome' element={<AdminHomePage />} />
       </Routes>
     </BrouwserRouter>
   </UserProvider>

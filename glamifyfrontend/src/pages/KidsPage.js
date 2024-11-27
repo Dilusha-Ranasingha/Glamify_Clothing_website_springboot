@@ -1,4 +1,4 @@
-import { Box, Typography } from "@mui/material";
+import { Box } from "@mui/material";
 import Header from "../components/Header/Header";
 import Footer from "../components/Footer/Footer";
 import KidsPageCards from "../components/Cards/KidsPageCards";
@@ -15,10 +15,7 @@ const KidsPage = () => {
             {/* Header section */}
             <Header />
 
-            {/* Welcome Section */}
-            <Typography variant="h4" align="center" sx={{ marginTop: "20px" }}>
-                Shop Kids
-            </Typography>
+            
 
             {/* Products Section */}
             <KidsPageCards />
