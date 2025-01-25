@@ -68,7 +68,7 @@ This project is a web-based **Clothing Store Management System** designed to han
 ### Backend Setup
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-username/clothing-store.git
+   git clone https://github.com/Dilusha-Ranasingha/Glamify_Clothing_website_springboot.git
    cd clothing-store/backend
    ```
 2. Open the backend project in IntelliJ IDEA.
