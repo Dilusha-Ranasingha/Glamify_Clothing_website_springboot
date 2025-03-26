@@ -51,6 +51,7 @@ This project is a web-based **Clothing Store Management System** designed to han
 - **Spring Boot**: Developed using IntelliJ IDEA.
 - **SQL Database**: Managed using MySQL and MySQL Workbench.
 - **API Testing**: Endpoints tested using Postman.
+- **Check Backedn Repository**: https://github.com/Dilusha-Ranasingha/Glamify-Clothing-website-BE
 
 ### Frontend:
 - **React.js**: Developed using VS Code with Material-UI for styling and Chart.js for data visualization.
@@ -68,7 +69,7 @@ This project is a web-based **Clothing Store Management System** designed to han
 ### Backend Setup
 1. Clone the repository:
    ```bash
-   git clone https://github.com/Dilusha-Ranasingha/Glamify_Clothing_website_springboot.git
+   git clone https://github.com/Dilusha-Ranasingha/Glamify-Clothing-website-BE
    cd clothing-store/backend
    ```
 2. Open the backend project in IntelliJ IDEA.
